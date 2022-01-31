@@ -1,88 +1,128 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
-import tasksModel from '../models/task'
+import chai, { expect } from 'chai'
+import chaiHttp from 'chai-http'
+import { response } from 'express'
+import task from '../models/task'
+import db from '../models/task'
 
-chai.use(chaiHttp);
+chai.use(chaiHttp)
 
-const app = require('../app');
-const request = chai.request.agent(app);
-const expect = chai.expect;
+const app = require('../app')
+const request = chai.request.agent(app)
 
-describe('get', () => {
+describe("get", () => {
 
-    context('quando eu tenho tarefas cadastradas', () => {
-
-        before((done) => {
-            let tasks = [
-                { title: 'Estudar NodejS', owner: 'eu@papito.io', done: false },
-                { title: 'Fazer compras', owner: 'eu@papito.io', done: false },
-                { title: 'Estudar MongoDB', owner: 'eu@papito.io', done: true }
-            ]
-
-            tasksModel.insertMany(tasks, (error, docs) => {
-                expect(error).to.be.null
-            });
-            done();
-        })
-
-        it('deve retornar uma lista', (done) => {
-            request
-                .get('/task')
-                .end((err, res) => {
-                    expect(res).to.has.status(200);
-                    expect(res.body.data).to.be.an('array');
-                    done();
-                })
-        })
-
-        it('deve filtrar por palavra chave', (done) => {
-            request
-                .get('/task')
-                .query({ title: 'Estudar' })
-                .end((err, res) => {
-                    expect(res).to.has.status(200);
-                    expect(res.body.data[0].title).to.equal('Estudar NodejS')
-                    expect(res.body.data[1].title).to.equal('Estudar MongoDB')
-                    done();
-                })
-        })
+    before((done) => {
+        db.deleteMany({})
+        done()
     })
 
-    context('quando busco por id', ()=> {
 
-        it('deve retornar uma única tarefa', (done) => {
+    before((done) => {
+        let tasks = [
+
+            {
+                "title": 'Estudar python',
+                "owner": 'dani.ajala@yahoo.com',
+                'done': false
+            },
+            {
+                "title": 'Estudar ruby',
+                "owner": 'dani.ajala@yahoo.com',
+                'done': false
+            },
+
+            {
+                "title": 'ler livros',
+                "owner": 'dani.ajala@yahoo.com',
+                'done': false
+            },
+        ]
+
+        db.insertMany(tasks)
+        done()
+    })
+
+
+    context("quando tenho tarefas cadastradas", () => {
+
+        it("deve retornar uma lista", (done) => {
+            request
+                .get('/task')
+                .end((err, res) => {
+                    expect(res).to.has.status(200)
+                    expect(res.body.data).to.be.an('array')
+                    done();
+                })
+        })
+
+        it("deve filtrar por palavra chave", (done) => {
+
+            request
+                .get('/task')
+                .query({ title: "Estudar" })
+                .end((err, res) => {
+                    expect(res).to.has.status(200)
+                    expect(res.body.data[0].title).to.equal("Estudar python")
+                    expect(res.body.data[1].title).to.equal("Estudar ruby")
+                    done()
+
+
+
+                })
+
+
+
+
+
+        })
+
+
+    })
+
+    context("quando busco por id", () => {
+        it("deve retornar uma unica tarefa", (done) => {
+
+
             let tasks = [
-                { title: 'Ler um livro de Javascript', owner: 'eu@papito.io', done: false },
-            ]
+                {
+                    "title": 'estudar um livro de javascript',
+                    "owner": 'dani.ajala@yahoo.com',
+                    'done': false
+                },
 
-            tasksModel.insertMany(tasks, (err, result) => {
+            ]
+            db.insertMany(tasks, (err, result) => {
                 let id = result[0]._id
+
                 request
-                    .get('/task/' + id)
-                    .end((err, res) => {
-                        expect(res).to.has.status(200);
-                        expect(res.body.data.title).to.equal(tasks[0].title);
-                        done();
-                    })
-            });
+                    .get("/task/" + id)
+                    .end((err, res))
+                expect(res).to.has.status(200)
+                expect(res.body.data.title).to.equal(tasks[0].title)
             
-        })
-    })
-
-    context('quando a tarefa nao existe', ()=> {
-
-        it('deve retornar 404', (done) => {
-            let id = require('mongoose').Types.ObjectId();
-            request
-            .get('/task/' + id)
-            .end((err, res) => {
-                expect(res).to.has.status(404);
-                expect(res.body).to.eql({});
-                done();
+              
+                
             })
             
+            done()
+      
+
+
         })
+
+
+      
+
+
+    
+
+
+        
     })
-
-
 })
+
+
+
+
+
+
