@@ -1,7 +1,5 @@
 import chai, { expect } from 'chai'
 import chaiHttp from 'chai-http'
-import { response } from 'express'
-import task from '../models/task'
 import db from '../models/task'
 
 chai.use(chaiHttp)
@@ -20,22 +18,10 @@ describe("get", () => {
     before((done) => {
         let tasks = [
 
-            {
-                "title": 'Estudar python',
-                "owner": 'dani.ajala@yahoo.com',
-                'done': false
-            },
-            {
-                "title": 'Estudar ruby',
-                "owner": 'dani.ajala@yahoo.com',
-                'done': false
-            },
+            { title: 'Estudar python', owner: 'dani.ajala@yahoo.com', done: false },
+            { title: 'Estudar ruby', owner: 'dani.ajala@yahoo.com', done: false },
+            { title: 'ler livros', owner: 'dani.ajala@yahoo.com', done: false }
 
-            {
-                "title": 'ler livros',
-                "owner": 'dani.ajala@yahoo.com',
-                'done': false
-            },
         ]
 
         db.insertMany(tasks)
@@ -64,14 +50,9 @@ describe("get", () => {
                     expect(res).to.has.status(200)
                     expect(res.body.data[0].title).to.equal("Estudar python")
                     expect(res.body.data[1].title).to.equal("Estudar ruby")
-                    done()
-
-
+                    done();
 
                 })
-
-
-
 
 
         })
@@ -80,46 +61,78 @@ describe("get", () => {
     })
 
     context("quando busco por id", () => {
-        it("deve retornar uma unica tarefa", (done) => {
-
+        it("deve retornar uma única tarefa", () => {
 
             let tasks = [
-                {
-                    "title": 'estudar um livro de javascript',
-                    "owner": 'dani.ajala@yahoo.com',
-                    'done': false
-                },
 
+                { title: 'ler um livro de python', owner: 'dani.ajala@yahoo.com', done: false },
+            
             ]
-            db.insertMany(tasks, (err, result) => {
+
+            db.insertMany(tasks,(err,result)=>{
                 let id = result[0]._id
-
                 request
-                    .get("/task/" + id)
-                    .end((err, res))
-                expect(res).to.has.status(200)
-                expect(res.body.data.title).to.equal(tasks[0].title)
-            
-              
+                .get('/task/'+id)
+                .end((err,res)=>{
+                    expect(res).to.has.status(200);
+                    expect(res.body.data.title).to.equal(tasks[0].title);
+                    done();
                 
-            })
-            
-            done()
-      
+                })
+               
 
+            });
+
+                
+                
+    
+            
+
+        })
+    })
+
+
+    context("id não existe", () => {
+        it("deve retornar 404", (done) => {
+
+            request
+            .get('/task')
+            .end((err, res) => {
+                expect(res).to.has.status(200)
+            
+
+           
+
+          
+                    done();
+                
+                })
+               
+
+            });
+    })
+
+                
+                
+    
+            
 
         })
 
 
-      
 
 
-    
 
 
-        
-    })
-})
+
+
+
+
+
+
+
+
+
 
 
 
