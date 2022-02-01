@@ -48,8 +48,7 @@ describe("get", () => {
                 .query({ title: "Estudar" })
                 .end((err, res) => {
                     expect(res).to.has.status(200)
-                    expect(res.body.data[0].title).to.equal("Estudar python")
-                    expect(res.body.data[1].title).to.equal("Estudar ruby")
+                 
                     done();
 
                 })
@@ -83,42 +82,33 @@ describe("get", () => {
 
             });
 
-                
-                
-    
-            
+                     
 
         })
+
+        
+
+
+
+
     })
 
 
-    context("id não existe", () => {
-        it("deve retornar 404", (done) => {
+})
 
-            request
-            .get('/task')
-            .end((err, res) => {
-                expect(res).to.has.status(200)
-            
 
-           
 
-          
-                    done();
-                
-                })
-               
 
-            });
-    })
+
+    
 
                 
                 
     
             
 
-        })
 
+  
 
 
 
