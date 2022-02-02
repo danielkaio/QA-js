@@ -48,7 +48,7 @@ describe("get", () => {
                 .query({ title: "Estudar" })
                 .end((err, res) => {
                     expect(res).to.has.status(200)
-                 
+
                     done();
 
                 })
@@ -59,56 +59,72 @@ describe("get", () => {
 
     })
 
-    context("quando busco por id", () => {
-        it("deve retornar uma única tarefa", () => {
 
-            let tasks = [
-
-                { title: 'ler um livro de python', owner: 'dani.ajala@yahoo.com', done: false },
-            
-            ]
-
-            db.insertMany(tasks,(err,result)=>{
-                let id = result[0]._id
-                request
-                .get('/task/'+id)
-                .end((err,res)=>{
-                    expect(res).to.has.status(200);
-                    expect(res.body.data.title).to.equal(tasks[0].title);
-                    done();
-                
-                })
-               
-
-            });
-
-                     
-
-        })
-
-        
-
-
-
-
-    })
-
-
-})
-
-
-
-
-
-    
-
-                
-                
-    
-            
 
 
   
+
+    context("quando id nao existe", () => {
+
+        it("deve retornar 404", (done) => {
+            let id = require('mongoose').Types.ObjectId()
+            request
+                .get('/task/'+ id)
+                .end((err, res) => {
+                    expect(res).to.has.status(404)
+                    expect(res.body).to.eql({})
+                  
+                    done();
+                })
+        })
+
+      
+
+        })
+
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
