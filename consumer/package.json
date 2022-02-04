@@ -1,0 +1,20 @@
+{
+  "name": "consumer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test" : " npm run dropdb_win & set NODE_ENV=dev&mocha test/mochawesome --require babel-register --exit " ,
+
+    "start": "nodemon app.js"
+
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "faker": "^6.6.6",
+    "nodemailer": "^6.7.2",
+    "nodemon": "^2.0.15"
+  }
+}

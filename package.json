@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "babel-node app.js",
-    "test": "mocha test --require babel-register --exit "
+    "test": " mocha test/ --reporter mocha-simple-html-reporter --reporter-options output=report.html  --require babel-register --exit "
   },
   "keywords": [
     "qaninja",
@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "mocha": "^9.2.0",
+    "mocha-simple-html-reporter": "^2.0.0",
     "mongoose": "^5.4.20"
   },
   "devDependencies": {
