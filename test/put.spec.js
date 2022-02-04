@@ -27,7 +27,7 @@ describe('put',()=>{
 
         it ("entao deve retornar 200",(done)=>{
            
-            task.title = "margerita "
+            task.title = "margarina "
             task.done = false
             request.put('/task/' + task._id)
             .send(task)
